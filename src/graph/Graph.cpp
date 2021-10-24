@@ -1,7 +1,7 @@
 //
 // Created by Andrzej on 23.10.2021.
 //
-#include <it ostream>
+#include <iostream>
 #include <algorithm>
 #include <fstream>
 #include "Graph.h"
