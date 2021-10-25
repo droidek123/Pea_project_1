@@ -11,21 +11,26 @@
 
 using namespace std;
 
+struct Result {
+    int best_score;
+    vector<int> list_of_nodes;
+};
+
+
 class Graph {
 public:
     vector<vector<int>> matrix;
     int number_of_nodes;
-    vector<int> default_tour;
 
     Graph();
 
     virtual ~Graph();
 
-    void load_data(const string& name_file);
+    void load_data(const string &name_file);
 
     void display();
 
-    int make_tour();
+    Result brute_force();
 
     int calculate_distance(const vector<int> &tour);
 
@@ -33,12 +38,6 @@ public:
     int calculate_distance(const vector<int> &tour, int best_score);
 
     void add_node();
-};
-
-
-struct Result{
-    int best_score;
-    vector<int> list_of_nodes;
 };
 
 
