@@ -15,61 +15,70 @@ Dynamic_programming::~Dynamic_programming() = default;
 Result Dynamic_programming::solve(Graph &graph) {
     Result result;
     result.best_score = INT_MAX;
-    int firstVertice = graph.getNumberOfVertices() - 1;
-    int numberOfMidpathCities = graph.getNumberOfVertices() - 1;
-    int numberOfSubsets = 1 << numberOfMidpathCities;
-    int allMidpathCities = (1 << numberOfMidpathCities) - 1;
+    int first_vertex = graph.getNumberOfVertices() - 1;
+    int number_of_vertexes = graph.getNumberOfVertices() - 1;
+    int path = (1 << number_of_vertexes) - 1;
 
-    for (int i = 0; i < numberOfMidpathCities; i++) {
-        map.insert({{0,                                  i},
-                    {graph.getDistance(firstVertice, i), firstVertice}});
+    for (int i = 0; i < number_of_vertexes; i++) {
+        map.insert({{0, i},
+                    {graph.getDistance(first_vertex, i), first_vertex}});
     }
-
-    for (int finalCity = 0; finalCity < numberOfMidpathCities; finalCity++) {
+    int min_final_city = -1;
+    for (int finalCity = 0; finalCity < number_of_vertexes; finalCity++) {
         int distance =
-                solve_sub_problem(graph, numberOfMidpathCities, make_subset(allMidpathCities, finalCity), finalCity) +
-                graph.getDistance(finalCity, firstVertice);
+                solve_sub_problem(graph, number_of_vertexes, make_subpath(path, finalCity), finalCity) +
+                graph.getDistance(finalCity, first_vertex);
 
         if (distance < result.best_score) {
             result.best_score = distance;
+            min_final_city = finalCity;
         }
     }
+
+    while (min_final_city != first_vertex) {
+        result.list_of_nodes.push_back(min_final_city);
+        path = make_subpath(path, min_final_city);
+        auto search = map.find({path, min_final_city});
+        min_final_city = search->second.parent;
+    }
+    result.list_of_nodes.push_back(first_vertex);
+
     map.clear();
     return result;
 }
 
-int Dynamic_programming::solve_sub_problem(Graph &graph, int number_of_mid_path_vertexes, int subset, int destCity) {
-    auto search = map.find({subset, destCity});
+int Dynamic_programming::solve_sub_problem(Graph &graph, int number_of_vertexes, int subpath, int dest_vertex) {
+    auto search = map.find({subpath, dest_vertex});
     if (search != map.end()) {
         return search->second.weight;
     } else {
-        int minDistance = INT_MAX;
-        int minParent = -1;
+        int min_distance = INT_MAX;
+        int min_parent = -1;
 
-        for (int preDestCity = 0; preDestCity < number_of_mid_path_vertexes; preDestCity++) {
-            if (is_city_in_subset(subset, preDestCity)) {
-                int subsetWithoutPreDestCity = make_subset(subset, preDestCity);
+        for (int pre_dest_vertex = 0; pre_dest_vertex < number_of_vertexes; pre_dest_vertex++) {
+            if (is_vertex_in_subpath(subpath, pre_dest_vertex)) {
+                int subpath_without_pre_vertex = make_subpath(subpath, pre_dest_vertex);
                 int distance =
-                        solve_sub_problem(graph, number_of_mid_path_vertexes, subsetWithoutPreDestCity, preDestCity) +
-                        graph.getDistance(preDestCity, destCity);
+                        solve_sub_problem(graph, number_of_vertexes, subpath_without_pre_vertex, pre_dest_vertex) +
+                        graph.getDistance(pre_dest_vertex, dest_vertex);
 
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    minParent = preDestCity;
+                if (distance < min_distance) {
+                    min_distance = distance;
+                    min_parent = pre_dest_vertex;
                 }
             }
         }
 
-        map.insert({{subset,      destCity},
-                    {minDistance, minParent}});
-        return minDistance;
+        map.insert({{subpath, dest_vertex},
+                    {min_distance, min_parent}});
+        return min_distance;
     }
 }
 
-int Dynamic_programming::make_subset(int subset, int vertex) {
-    return subset & ~(1 << vertex);
+int Dynamic_programming::make_subpath(int subpath, int vertex) {
+    return subpath & ~(1 << vertex);
 }
 
-bool Dynamic_programming::is_city_in_subset(int subset, int city) {
-    return (subset & (1 << city)) != 0;
+bool Dynamic_programming::is_vertex_in_subpath(int subpath, int city) {
+    return (subpath & (1 << city)) != 0;
 }
