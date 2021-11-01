@@ -12,9 +12,7 @@
 
 class Dynamic_programming {
 private:
-//    unordered_map<pairKey,int,pair_hash> map;
-    vector<vector<int>> distances;
-    vector<vector<int>> prev_vertex;
+    unordered_map<pairKey, MapInfo, pair_hash> map;
 public:
     Dynamic_programming();
 
@@ -22,13 +20,11 @@ public:
 
     Result solve(Graph &graph);
 
-    int solve_sub_problem(Graph &graph, int numberOfMidpathCities, int subset, int destCity);
+    int solve_sub_problem(Graph &graph, int number_of_vertexes, int subset, int destCity);
 
-    static int make_subset(int subset, int vertex);
+    static int make_subpath(int subset, int vertex);
 
-    static bool is_city_in_subset(int subset, int city);
-//    void heldKarp(Graph &graph);
-//    static vector<int> combinations(int size, int r);
+    static bool is_vertex_in_subpath(int subset, int city);
 };
 
 

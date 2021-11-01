@@ -13,20 +13,20 @@ struct Result {
     vector<int> list_of_nodes;
 };
 
-//struct MapInfo{
-//    int weight;
-//    int vertex;
-//};
-//
-//typedef std::pair<int,int> pairKey;
-//
-//struct pair_hash
-//{
-//    template <class T1, class T2>
-//    std::size_t operator() (const std::pair<T1, T2> &pairKey) const
-//    {
-//        return std::hash<T1>()(pairKey.first) ^ std::hash<T2>()(pairKey.second);
-//    }
-//};
+struct MapInfo{
+    int weight;
+    int parent;
+};
+
+typedef std::pair<int,int> pairKey;
+
+struct pair_hash
+{
+    template <class T1, class T2>
+    std::size_t operator() (const std::pair<T1, T2> &pairKey) const
+    {
+        return std::hash<T1>()(pairKey.first) ^ std::hash<T2>()(pairKey.second);
+    }
+};
 
 #endif //PEA_PROJEKT_1_STRUCTURES_H
