@@ -1,30 +1,32 @@
 //
 // Created by Andrzej on 23.10.2021.
 //
-
+#pragma once
 #ifndef PEA_PROJEKT_1_GRAPH_H
 #define PEA_PROJEKT_1_GRAPH_H
 
 #include <vector>
 #include <string>
-
-
-using namespace std;
-
-struct Result {
-    int best_score;
-    vector<int> list_of_nodes;
-};
+#include "Structures.h"
 
 
 class Graph {
-public:
+private:
     vector<vector<int>> matrix;
-    int number_of_nodes;
+    int number_of_vertices;
+public:
 
     Graph();
 
     virtual ~Graph();
+
+    const vector<vector<int>> &getMatrix() const;
+
+    int getNumberOfVertices() const;
+
+    int getDistance(int startDist, int endDist);
+
+    void add_node();
 
     void load_data(const string &name_file);
 
@@ -32,12 +34,7 @@ public:
 
     Result brute_force();
 
-    int calculate_distance(const vector<int> &tour);
-
-
-    int calculate_distance(const vector<int> &tour, int best_score);
-
-    void add_node();
+    int calculate_distance(const vector<int> &path);
 };
 
 

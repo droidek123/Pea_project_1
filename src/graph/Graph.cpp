@@ -2,15 +2,41 @@
 // Created by Andrzej on 23.10.2021.
 //
 #include <iostream>
+#include <limits>
 #include <algorithm>
+#include <unordered_map>
 #include <fstream>
 #include "Graph.h"
 
 Graph::Graph() {
-    this->number_of_nodes = 0;
+    this->number_of_vertices = 0;
 }
 
 Graph::~Graph() = default;
+
+
+void Graph::add_node() {
+    if (this->matrix.empty()) {
+        this->matrix.resize(1);
+        this->number_of_vertices = 1;
+        this->matrix[0].push_back(0);
+    }
+    this->number_of_vertices += 1;
+    this->matrix.resize(this->number_of_vertices + 1);
+    for (int i = 0; i < this->number_of_vertices; i++) {
+        if (i == this->number_of_vertices) {
+            this->matrix[i].push_back(0);
+        } else {
+            cout << "Podaj odleglosc od " + to_string(i) + "-go wierzcholka do " + to_string(this->number_of_vertices) +
+                    "-go wierzcholka" << endl;
+            int temp;
+            cin >> temp;
+            this->matrix[i].push_back(temp);
+            this->matrix[this->number_of_vertices].push_back(temp);
+        }
+    }
+}
+
 
 void Graph::load_data(const string &name_file) {
     this->matrix.clear();
@@ -18,18 +44,16 @@ void Graph::load_data(const string &name_file) {
     fstream file_in;
 
 
-//    file_in.open("C:/Users/Andrzej/Desktop/Studia/Sem5/Pea/Pea_projekt_1/src/" + name_file + ".txt");
     file_in.open(name_file + ".txt");
     if (file_in.is_open()) {
-        file_in >> this->number_of_nodes;
-        this->matrix.resize(this->number_of_nodes);
-        this->number_of_nodes--;
+        file_in >> this->number_of_vertices;
+        this->matrix.resize(this->number_of_vertices);
 
         if (file_in.fail())
             cout << "File error - READ SIZE" << endl;
         else
-            for (int i = 0; i <= this->number_of_nodes; i++) {
-                for (int j = 0; j <= this->number_of_nodes; j++) {
+            for (int i = 0; i < this->number_of_vertices; i++) {
+                for (int j = 0; j < this->number_of_vertices; j++) {
                     file_in >> val;
                     if (file_in.fail()) {
                         cout << "File error - READ DATA" << endl;
@@ -54,64 +78,41 @@ void Graph::display() {
 
 Result Graph::brute_force() {
     Result result;
-    vector<int> tour;
+    vector<int> path;
 
-    for (int i = 0; i <= this->number_of_nodes; i++) {
-        tour.push_back(i);
+    for (int i = 0; i < this->number_of_vertices; i++) {
+        path.push_back(i);
     }
-    tour.push_back(0);
+    path.push_back(0);
 
-    result.best_score = calculate_distance(tour);
+    result.best_score = calculate_distance(path);
 
-    while (next_permutation(tour.begin() + 1, tour.end() - 1)) {
-        int r = calculate_distance(tour, result.best_score);
+    while (next_permutation(path.begin() + 1, path.end() - 1)) {
+        int r = calculate_distance(path);
         if (r < result.best_score) {
             result.best_score = r;
-            result.list_of_nodes = tour;
+            result.list_of_nodes = path;
         }
     }
     return result;
 }
 
-int Graph::calculate_distance(const vector<int> &tour) {
+int Graph::calculate_distance(const vector<int> &path) {
     int result = 0;
-    for (int i = 1; i < tour.size(); ++i) {
-        result += matrix[tour[i - 1]][tour[i]];
+    for (int i = 1; i < path.size(); ++i) {
+        result += this->matrix[path[i - 1]][path[i]];
     }
     return result;
 }
 
-int Graph::calculate_distance(const vector<int> &tour, int best_score) {
-    int result = 0;
-    for (int i = 1; i < tour.size(); ++i) {
-        if (result > best_score) {
-            return best_score;
-        } else {
-            result += matrix[tour[i - 1]][tour[i]];
-        }
-    }
-    return result;
+const vector<vector<int>> &Graph::getMatrix() const {
+    return matrix;
 }
 
-void Graph::add_node() {
-    if (this->matrix.empty()) {
-        this->matrix.resize(1);
-        this->matrix[0].push_back(0);
-    }
-    this->number_of_nodes += 1;
-    this->matrix.resize(this->number_of_nodes + 1);
-    for (int i = 0; i <= this->number_of_nodes; i++) {
-        if (i == this->number_of_nodes) {
-            this->matrix[i].push_back(0);
-        } else {
-            cout << "Podaj odleglosc od " + to_string(i) + "-go wierzcholka do " + to_string(this->number_of_nodes) +
-                    "-go wierzcholka" << endl;
-            int temp;
-            cin >> temp;
-            this->matrix[i].push_back(temp);
-            this->matrix[this->number_of_nodes].push_back(temp);
-        }
-    }
+int Graph::getNumberOfVertices() const {
+    return number_of_vertices;
 }
 
-
+int Graph::getDistance(int startDist, int endDist) {
+    return this->matrix[startDist][endDist];
+}
