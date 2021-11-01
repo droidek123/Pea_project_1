@@ -12,9 +12,9 @@
 
 class Dynamic_programming {
 private:
-//    unordered_map<pairKey,int,pair_hash> map;
-    vector<vector<int>> distances;
-    vector<vector<int>> prev_vertex;
+    unordered_map<pairKey,MapInfo,pair_hash> map;
+//    vector<vector<int>> distances;
+//    vector<vector<int>> prev_vertex;
 public:
     Dynamic_programming();
 

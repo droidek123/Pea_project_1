@@ -35,8 +35,6 @@ public:
     Result brute_force();
 
     int calculate_distance(const vector<int> &path);
-
-    Result dynamic();
 };
 
 
