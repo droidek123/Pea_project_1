@@ -3,6 +3,7 @@
 
 #include "graph/Graph.h"
 #include "Dynamic_programming/Dynamic_programming.h"
+#include "BruteForce/BruteForce.h"
 
 
 using namespace std;
@@ -55,14 +56,12 @@ void menuBruteForce(){
     char option;
     string name;
     Graph graph;
-
     do {
         cout << "================= BRUTE FORCE =================" << endl;
         cout << "\t   1. Load from file" << endl;
         cout << "\t   2. Generate adjacency matrix" << endl;
         cout << "\t   3. Display adjacency matrix" << endl;
-        cout << "\t   4. Execute algorithm without Algorithms" << endl;
-        cout << "\t   5. Execute algorithm with Algorithms" << endl;
+        cout << "\t   4. Execute algorithm" << endl;
         cout << "\t   0. Back to the main menu" << endl<<endl;
         cout << "Chosen option: ";
         cin >> option;
@@ -75,13 +74,13 @@ void menuBruteForce(){
             case '1':
                 cout << ("Plese enter name of the file: ");
                 cin >> name;
-                graph.load_data(name);
+                graph.loadData(name);
                 break;
             case '2':
                 int x;
                 cout << "Enter amount of nodes: ";
                 cin >> x;
-                //graph.generateGraph(x);
+                graph.generateGraph(x);
                 break;
             case '3':
                 if(graph.getNumberOfVertices() <=1){
@@ -90,18 +89,24 @@ void menuBruteForce(){
                 }
                 graph.display();
                 break;
-            case '4':
-                if(graph.getNumberOfVertices() <=1){
+            case '4': {
+                Result result;
+                if (graph.getNumberOfVertices() <= 1) {
                     cout << ("No adjacency matrix was created.\n");
                     break;
+                } else {
+                    BruteForce bruteForce(graph);
+                    result = bruteForce.bruteForce();
+                    cout << result.best_score <<endl;
+                    for(auto r : result.list_of_nodes){
+                        cout << to_string(r) + " ";
+                    }
+                    cout << endl;
                 }
-                {
-                    graph.brute_force();
-                }
+            }
                 break;
-            default:
-                cout << "Wrong option chosen.\n";
-
+                default:
+                    cout << "Wrong option chosen.\n";
         }
 
     } while (!quit);
@@ -141,7 +146,7 @@ void menuDynamicPrograming(){
             case '1':
                 cout << ("Plese enter name of the file: ");
                 cin >> name;
-                graph.load_data(name);
+                graph.loadData(name);
                 break;
             case '2':
                 int x;
@@ -197,7 +202,7 @@ void menuBnB(){
             case '1':
                 cout << ("Plese enter name of the file: ");
                 cin >> name;
-                graph.load_data(name);
+                graph.loadData(name);
                 break;
             case '2':
                 int x;

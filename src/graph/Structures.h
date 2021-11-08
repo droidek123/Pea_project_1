@@ -4,7 +4,7 @@
 
 #ifndef PEA_PROJEKT_1_STRUCTURES_H
 #define PEA_PROJEKT_1_STRUCTURES_H
-
+#include <vector>
 
 using namespace std;
 
