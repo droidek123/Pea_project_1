@@ -5,8 +5,8 @@
 #ifndef PEA_PROJEKT_1_BRUTEFORCE_H
 #define PEA_PROJEKT_1_BRUTEFORCE_H
 
-#include "../graph/Structures.h"
 #include "../graph/Graph.h"
+#include "../Result/Result.h"
 
 class BruteForce {
 private:

@@ -4,14 +4,8 @@
 
 #ifndef PEA_PROJEKT_1_STRUCTURES_H
 #define PEA_PROJEKT_1_STRUCTURES_H
-#include <vector>
 
 using namespace std;
-
-struct Result {
-    int best_score;
-    vector<int> list_of_nodes;
-};
 
 struct MapInfo{
     int weight;

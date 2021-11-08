@@ -14,7 +14,7 @@ Dynamic_programming::~Dynamic_programming() = default;
 
 Result Dynamic_programming::solve(Graph &graph) {
     Result result;
-    result.best_score = INT_MAX;
+    result.startTimer();
     int first_vertex = graph.getNumberOfVertices() - 1;
     int number_of_vertexes = graph.getNumberOfVertices() - 1;
     int path = (1 << number_of_vertexes) - 1;
@@ -42,7 +42,7 @@ Result Dynamic_programming::solve(Graph &graph) {
         min_final_city = search->second.parent;
     }
     result.list_of_nodes.push_back(first_vertex);
-
+    result.endTimer();
     map.clear();
     return result;
 }

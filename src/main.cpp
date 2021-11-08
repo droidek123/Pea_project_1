@@ -1,6 +1,5 @@
 #include <iostream>
-
-
+#include <iomanip>
 #include "graph/Graph.h"
 #include "Dynamic_programming/Dynamic_programming.h"
 #include "BruteForce/BruteForce.h"
@@ -97,11 +96,14 @@ void menuBruteForce(){
                 } else {
                     BruteForce bruteForce(graph);
                     result = bruteForce.bruteForce();
-                    cout << result.best_score <<endl;
+                    cout << "Result: " + to_string(result.best_score) <<endl;
                     for(auto r : result.list_of_nodes){
-                        cout << to_string(r) + " ";
+                        cout << "Best path: " + to_string(r) + " ";
                     }
                     cout << endl;
+                    cout << "Time [s] " << setprecision(3) << (float)result.elapsed / result.frequency << endl;
+                    cout << "Time [ms] " << (1000.0 * result.elapsed)/result.frequency << endl;
+                    cout << "Time [us] " << (1000000.0 * result.elapsed)/result.frequency << endl;
                 }
             }
                 break;
@@ -113,7 +115,6 @@ void menuBruteForce(){
 }
 
 void displayMainMenu(){
-    // system("clear");
     cout << "================== MAIN MENU ==================" << endl;
     cout << "\t   1. Brute Force" << endl;
     cout << "\t   2. B&B" << endl;
@@ -166,8 +167,19 @@ void menuDynamicPrograming(){
                     cout << ("No adjacency matrix was created.\n");
                     break;
                 }
+                else
                 {
-                    dynamicProgramming.solve(graph);
+                    Result result;
+                    result = dynamicProgramming.solve(graph);
+                    cout << "Result: " + to_string(result.best_score) <<endl;
+                    cout << "Best path: ";
+                    for(auto r : result.list_of_nodes){
+                        cout << to_string(r) + " ";
+                    }
+                    cout << endl;
+                    cout << "Time [s] " << setprecision(3) << (float)result.elapsed / result.frequency << endl;
+                    cout << "Time [ms] " << (1000.0 * result.elapsed)/result.frequency << endl;
+                    cout << "Time [us] " << (1000000.0 * result.elapsed)/result.frequency << endl;
                 }
                 break;
             default:

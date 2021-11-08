@@ -14,13 +14,12 @@ BruteForce::~BruteForce() = default;
 Result BruteForce::bruteForce() {
     Result result;
     vector<int> path;
-    result.best_score = INT_MAX;
 
     path.reserve(this->graph.number_of_vertices);
     for (int i = 0; i < graph.getNumberOfVertices(); i++) {
         path.push_back(i);
     }
-
+    result.startTimer();
     do {
         int r = 0;
         for (int i = 1; i < path.size(); ++i) {
@@ -34,5 +33,6 @@ Result BruteForce::bruteForce() {
     result.list_of_nodes.push_back(0);
     unsigned int i = result.list_of_nodes.size()-1;
     result.best_score += graph.matrix[result.list_of_nodes[i-1]][result.list_of_nodes[i]];
+    result.endTimer();
     return result;
 }
