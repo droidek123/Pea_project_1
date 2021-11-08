@@ -3,8 +3,7 @@
 //
 #include <iostream>
 #include <limits>
-#include <algorithm>
-#include <unordered_map>
+#include <random>
 #include <fstream>
 #include "Graph.h"
 
@@ -14,31 +13,7 @@ Graph::Graph() {
 
 Graph::~Graph() = default;
 
-
-void Graph::add_node() {
-    if (this->matrix.empty()) {
-        this->matrix.resize(1);
-        this->number_of_vertices = 1;
-        this->matrix[0].push_back(0);
-    }
-    this->number_of_vertices += 1;
-    this->matrix.resize(this->number_of_vertices + 1);
-    for (int i = 0; i < this->number_of_vertices; i++) {
-        if (i == this->number_of_vertices) {
-            this->matrix[i].push_back(0);
-        } else {
-            cout << "Podaj odleglosc od " + to_string(i) + "-go wierzcholka do " + to_string(this->number_of_vertices) +
-                    "-go wierzcholka" << endl;
-            int temp;
-            cin >> temp;
-            this->matrix[i].push_back(temp);
-            this->matrix[this->number_of_vertices].push_back(temp);
-        }
-    }
-}
-
-
-void Graph::load_data(const string &name_file) {
+void Graph::loadData(const string &name_file) {
     this->matrix.clear();
     string val;
     fstream file_in;
@@ -76,43 +51,34 @@ void Graph::display() {
     }
 }
 
-Result Graph::brute_force() {
-    Result result;
-    vector<int> path;
-
-    for (int i = 0; i < this->number_of_vertices; i++) {
-        path.push_back(i);
-    }
-    path.push_back(0);
-
-    result.best_score = calculate_distance(path);
-
-    while (next_permutation(path.begin() + 1, path.end() - 1)) {
-        int r = calculate_distance(path);
-        if (r < result.best_score) {
-            result.best_score = r;
-            result.list_of_nodes = path;
-        }
-    }
-    return result;
-}
-
-int Graph::calculate_distance(const vector<int> &path) {
-    int result = 0;
-    for (int i = 1; i < path.size(); ++i) {
-        result += this->matrix[path[i - 1]][path[i]];
-    }
-    return result;
-}
-
-const vector<vector<int>> &Graph::getMatrix() const {
-    return matrix;
-}
-
 int Graph::getNumberOfVertices() const {
     return number_of_vertices;
 }
 
 int Graph::getDistance(int startDist, int endDist) {
     return this->matrix[startDist][endDist];
+}
+
+void Graph::generateGraph(int size) {
+
+    if(size <= 1){
+        cout<<"To little nodes were given." << endl;
+        return;
+    }
+    this->matrix.clear();
+    this->number_of_vertices = size;
+    this->matrix.resize(size);
+    for(int i = 0; i < size;i++){
+        this->matrix[i].resize(size);
+    }
+
+    srand (time(nullptr));
+    for (int i = 0; i < this->number_of_vertices; i ++){
+        for (int j = 0; j < this->number_of_vertices; j++){
+            if(i == j)
+                this->matrix[i][j] = 0;
+            else
+                this->matrix[i][j] = rand()%100+1;
+        }
+    }
 }

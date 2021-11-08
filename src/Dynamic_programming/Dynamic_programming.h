@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <vector>
 #include "../graph/Graph.h"
+#include "../Result/Result.h"
 
 
 class Dynamic_programming {
