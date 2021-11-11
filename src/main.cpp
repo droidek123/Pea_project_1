@@ -1,8 +1,9 @@
 #include <iostream>
 #include <iomanip>
 #include "graph/Graph.h"
-#include "Dynamic_programming/Dynamic_programming.h"
+#include "DynamicProgramming/Dynamic_programming.h"
 #include "BruteForce/BruteForce.h"
+#include "BranchAndBound/BranchAndBound.h"
 
 
 using namespace std;
@@ -44,7 +45,6 @@ int main() {
         }
 
     } while (!quit);
-
     return 0;
 
 }
@@ -97,16 +97,17 @@ void menuBruteForce(){
                     BruteForce bruteForce(graph);
                     result = bruteForce.bruteForce();
                     cout << "Result: " + to_string(result.best_score) <<endl;
+                    cout << "Best path: ";
                     for(auto r : result.list_of_nodes){
-                        cout << "Best path: " + to_string(r) + " ";
+                        cout << to_string(r) + " ";
                     }
                     cout << endl;
                     cout << "Time [s] " << setprecision(3) << (float)result.elapsed / result.frequency << endl;
                     cout << "Time [ms] " << (1000.0 * result.elapsed)/result.frequency << endl;
                     cout << "Time [us] " << (1000000.0 * result.elapsed)/result.frequency << endl;
+                    break;
                 }
             }
-                break;
                 default:
                     cout << "Wrong option chosen.\n";
         }
@@ -195,7 +196,7 @@ void menuBnB(){
     char option;
     string name;
     Graph graph;
-    //BranchAndBound dBnB;
+    BranchAndBound branchAndBound;
     do {
         cout << "================= BRANCH AND BOUND =================" << endl;
         cout << "\t   1. Load from file" << endl;
@@ -220,7 +221,7 @@ void menuBnB(){
                 int x;
                 cout << "Enter amount of nodes: ";
                 cin >> x;
-                //graph.generateGraph(x);
+                graph.generateGraph(x);
                 break;
             case '3':
                 if(graph.getNumberOfVertices() <=1){
@@ -234,10 +235,20 @@ void menuBnB(){
                     cout << ("No adjacency matrix was created.\n");
                     break;
                 }
-                {
-                    //dBnB.bnb(graph);
+                else {
+                    Result result;
+                    result = branchAndBound.bnb(graph);
+                    cout << "Result: " + to_string(result.best_score) <<endl;
+                    cout << "Best path: ";
+                    for(auto r : result.list_of_nodes){
+                        cout << to_string(r) + " ";
+                    }
+                    cout << endl;
+                    cout << "Time [s] " << setprecision(3) << (float)result.elapsed / result.frequency << endl;
+                    cout << "Time [ms] " << (1000.0 * result.elapsed)/result.frequency << endl;
+                    cout << "Time [us] " << (1000000.0 * result.elapsed)/result.frequency << endl;
+                    break;
                 }
-                break;
             default:
                 cout << "Wrong option chosen.\n";
 
