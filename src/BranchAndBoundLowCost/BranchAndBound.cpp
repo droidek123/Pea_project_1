@@ -10,6 +10,7 @@ Result BranchAndBound::bnb(Graph &graph) {
     Result result;
     vertexes_number = graph.number_of_vertices;
     int track_cost =INT_MAX;
+    result.startTimer();
     Node *source = newNode(graph.matrix, r, 0, -1, 0, vertexes_number);
     source->cost = costFind(source->reduced_matrix, vertexes_number);
     pq.push(source);
@@ -27,11 +28,6 @@ Result BranchAndBound::bnb(Graph &graph) {
 
             track_cost = leastCost->cost;
             result.best_score = track_cost;
-            cout << "Current upperbound: " << result.best_score << endl;
-            printTrackPath(leastCost->trackpath);
-            for(int h = 0; h< vertexes_number;h++){
-                result.list_of_nodes.push_back(leastCost->trackpath[h].first);
-            }
 
         }
 
@@ -57,6 +53,7 @@ Result BranchAndBound::bnb(Graph &graph) {
         delete leastCost;
 
     }
+    result.endTimer();
     return result;
 }
 
@@ -145,15 +142,4 @@ int BranchAndBound::costFind(int **reduced_matrix, int vertexes_number) {
     delete[] row;
     delete[] col;
     return cost;
-
-}
-
-void BranchAndBound::printTrackPath(vector<pair<int, int>> const &list) {
-    for (int i = 0; i < list.size(); i++) {
-        cout << list[i].first;
-
-        if (i < list.size() - 1)
-            cout << " ";
-    }
-    cout << " " << 0 << endl;
 }

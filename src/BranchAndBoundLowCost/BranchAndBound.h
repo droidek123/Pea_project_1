@@ -45,8 +45,6 @@ public:
 
     static int costFind(int** reduced_matrix, int vertexes_number);
 
-    static void printTrackPath(std::vector<std::pair<int, int>> const &list);
-
     static Node* newNode(int** ancestorMtrx, std::vector<std::pair<int,int>> const &track_path, int level, int i , int j, int vertexes_number );
 };
 #endif //PEA_PROJEKT_1_BRANCHANDBOUND_H
