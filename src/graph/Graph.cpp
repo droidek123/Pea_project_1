@@ -11,10 +11,23 @@ Graph::Graph() {
     this->number_of_vertices = 0;
 }
 
-Graph::~Graph() = default;
+Graph::~Graph(){
+    if(this->number_of_vertices >= 1) {
+        this->destruct();
+    }
+}
+
+void Graph::destruct() {
+    for (int i = 0; i<number_of_vertices; i++){
+        delete [] matrix [i];
+    }
+    delete [] matrix;
+    this->number_of_vertices = 0;
+}
+
 
 void Graph::loadData(const string &name_file) {
-    this->matrix.clear();
+    this->destruct();
     string val;
     fstream file_in;
 
@@ -22,7 +35,7 @@ void Graph::loadData(const string &name_file) {
     file_in.open(name_file + ".txt");
     if (file_in.is_open()) {
         file_in >> this->number_of_vertices;
-        this->matrix.resize(this->number_of_vertices);
+        this->resize(number_of_vertices);
 
         if (file_in.fail())
             cout << "File error - READ SIZE" << endl;
@@ -34,7 +47,7 @@ void Graph::loadData(const string &name_file) {
                         cout << "File error - READ DATA" << endl;
                         break;
                     } else
-                        this->matrix[i].push_back(stoi(val));
+                        this->matrix[i][j] = stoi(val);
                 }
             }
         file_in.close();
@@ -42,10 +55,10 @@ void Graph::loadData(const string &name_file) {
         cout << "File error - OPEN" << endl;
 }
 
-void Graph::display() {
-    for (auto &m: this->matrix) {
-        for (auto &mm: m) {
-            cout << mm;
+void Graph::display() const {
+    for (int i = 0; i < this->number_of_vertices; i ++){
+        for (int j = 0; j < this->number_of_vertices; j++){
+            cout << this->matrix[i][j] << " ";
         }
         cout << endl;
     }
@@ -55,7 +68,7 @@ int Graph::getNumberOfVertices() const {
     return number_of_vertices;
 }
 
-int Graph::getDistance(int startDist, int endDist) {
+int Graph::getDistance(int startDist, int endDist) const {
     return this->matrix[startDist][endDist];
 }
 
@@ -65,12 +78,10 @@ void Graph::generateGraph(int size) {
         cout<<"To little nodes were given." << endl;
         return;
     }
-    this->matrix.clear();
+    if(this->number_of_vertices >1)
+        this->destruct();
     this->number_of_vertices = size;
-    this->matrix.resize(size);
-    for(int i = 0; i < size;i++){
-        this->matrix[i].resize(size);
-    }
+    this->resize(size);
 
     srand (time(nullptr));
     for (int i = 0; i < this->number_of_vertices; i ++){
@@ -80,5 +91,12 @@ void Graph::generateGraph(int size) {
             else
                 this->matrix[i][j] = rand()%100+1;
         }
+    }
+}
+
+void Graph::resize(int new_size) {
+    this->matrix = new int * [new_size];
+    for (int i = 0; i <new_size; ++i){
+        this->matrix[i] = new int [new_size];
     }
 }

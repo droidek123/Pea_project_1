@@ -12,22 +12,26 @@
 
 class Graph {
 public:
-    vector<vector<int>> matrix;
+    int** matrix{};
     int number_of_vertices;
 
     Graph();
 
     virtual ~Graph();
 
+    void destruct();
+
     [[nodiscard]] int getNumberOfVertices() const;
 
-    int getDistance(int startDist, int endDist);
+    int getDistance(int startDist, int endDist) const;
 
     void loadData(const string &name_file);
 
-    void display();
+    void display() const;
 
     void generateGraph(int size);
+
+    void resize(int new_size);
 };
 
 
