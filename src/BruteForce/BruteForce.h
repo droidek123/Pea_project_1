@@ -12,11 +12,11 @@ class BruteForce {
 private:
     Graph graph;
 public:
-    explicit BruteForce(const Graph& graph);
+    explicit BruteForce();
 
     virtual ~BruteForce();
 
-    Result bruteForce();
+    Result bruteForce(const Graph &graph);
 };
 
 

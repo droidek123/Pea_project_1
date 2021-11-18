@@ -9,28 +9,29 @@
 Result BranchAndBound::bnb(Graph &graph) {
     Result result;
     vertexes_number = graph.number_of_vertices;
-    int track_cost =INT_MAX;
+    int track_cost = INT_MAX;
     result.startTimer();
-    Node *source = newNode(graph.matrix, r, 0, -1, 0, vertexes_number);
-    source->cost = costFind(source->reduced_matrix, vertexes_number);
-    pq.push(source);
+    Node *source = newNode(graph.matrix, path, 0, -1, 0, vertexes_number); // stworzenie poczatkowego wierzcholka
+    source->cost = costFind(source->reduced_matrix,
+                            vertexes_number); // znalezienie dolnej granicy dla danego wierzcholka
+    unvisited.push(source);
 
-    while (!pq.empty()) {
-        Node *leastCost = pq.top();
-        pq.pop();
-        if (leastCost->cost >= track_cost) {
+    while (!unvisited.empty()) {
+        Node *leastCost = unvisited.top(); // znalezienie  wierzchola z najmniejszym kosztem sciezki
+        unvisited.pop();
+        if (leastCost->cost >= track_cost) { // sprawdzenie gornego ograniczenia
             continue;
         }
         int i = leastCost->cityNum;
 
-        if (leastCost->level == vertexes_number - 1) {
+        if (leastCost->level == vertexes_number - 1) { // sprawdzenie czy doszlismy juz do konca sciezki
             leastCost->trackpath.emplace_back(i, 0);
 
             track_cost = leastCost->cost;
             result.best_score = track_cost;
 
         }
-
+        //  petla odpowiadajaca za tworzenie wierzcholkow potomnych z danego wierzchola oraz
         for (int j = 0; j < vertexes_number; j++) {
             if (leastCost->reduced_matrix[i][j] != INT_MAX) {
 
@@ -40,12 +41,13 @@ Result BranchAndBound::bnb(Graph &graph) {
                 child->cost += costFind(child->reduced_matrix, vertexes_number);
 
                 if (child->cost < track_cost) {
-                    pq.push(child);
+                    unvisited.push(child);
                 }
 
             }
         }
 
+        // zwalnianie pamieci
         for (int f = 0; f < vertexes_number; ++f) {
             delete[] leastCost->reduced_matrix[f];
         }
@@ -57,6 +59,16 @@ Result BranchAndBound::bnb(Graph &graph) {
     return result;
 }
 
+/**
+ * Funkcja tworzaca nowy wierzcholek
+ * @param ancestorMtrx wierzcholek potomny
+ * @param track_path sciezka ktora przeszlismy
+ * @param level poziom drzewa na ktorym jestesmy
+ * @param i wierzcholek na macierzy z ktorego przyszlismy
+ * @param j wierzcholek na macierzy do ktorego idziemy
+ * @param vertexes_number liczba wierzcholkow
+ * @return zwraca nowy wierzcholek
+ */
 Node *BranchAndBound::newNode(int **ancestorMtrx, vector<pair<int, int>> const &track_path, int level, int i, int j,
                               int vertexes_number) {
     Node *node = new Node;
@@ -91,6 +103,7 @@ Node *BranchAndBound::newNode(int **ancestorMtrx, vector<pair<int, int>> const &
 
 }
 
+// redukuje kazdy wiersz
 void BranchAndBound::reduceRow(int **reduced_matrix, int *row, int vertexes_number) {
     for (int i = 0; i < vertexes_number; i++) {
         row[i] = INT_MAX;
@@ -108,6 +121,7 @@ void BranchAndBound::reduceRow(int **reduced_matrix, int *row, int vertexes_numb
 
 }
 
+// redukuje kazada kolumne
 void BranchAndBound::reduceCol(int **reduced_matrix, int *col, int vertexes_number) {
     fill_n(col, vertexes_number, INT_MAX);
 
@@ -123,6 +137,7 @@ void BranchAndBound::reduceCol(int **reduced_matrix, int *col, int vertexes_numb
 
 }
 
+// oblicza koszt
 int BranchAndBound::costFind(int **reduced_matrix, int vertexes_number) {
     int cost = 0;
 

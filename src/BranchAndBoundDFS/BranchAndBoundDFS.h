@@ -12,28 +12,35 @@
 
 using namespace std;
 
-struct NodeDFS{
+/**
+ * Struktora reprezentujaca wierzcholek
+ */
+struct NodeDFS {
     int lower_bound;
     int vertex;
 };
 
-
+/**
+ * Klasa wykonujaca algorytm bnb
+ */
 class BranchAndBoundDFS {
 public:
-    int **matrix;
-    int number_of_vertices;
-    int u_bound;
-    int temp_cost;
-    bool *visited;
-    int *outgoing_edges;
-    int n0_lb;
-    stack<int> path;
-    stack<int> helper_path;
+    int **matrix{}; // graf na ktorym wykonujemy algorytm
+    int number_of_vertices{}; // liczba wierzcholkow w grafie
+    int upper_bound{}; // gorna granica a zarazem najlepszy wynik
+    bool *visited_vertices{};   // odwiedzone wierzcholki
+    int *outgoing_edges{};  // dolne ograniczenia
+    [[maybe_unused]] vector<int> path; // najlepsza scierzka
+    vector<int> helper_path; // scierzka w ktorej w danym momencie jestesmy
 
-    explicit BranchAndBoundDFS(const Graph& graph);
+    BranchAndBoundDFS();
+
     ~BranchAndBoundDFS();
-    [[nodiscard]] int calculateLowerBound(NodeDFS nodeDfs, int next) const;
-    Result bnb();
+
+    [[nodiscard]] int calculateLowerBound(NodeDFS node, int next) const;
+
+    Result bnb(const Graph &graph);
+
     void recursion(NodeDFS node);
 
 };

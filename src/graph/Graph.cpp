@@ -11,23 +11,24 @@ Graph::Graph() {
     this->number_of_vertices = 0;
 }
 
-Graph::~Graph(){
-    if(this->number_of_vertices >= 1) {
+Graph::~Graph() {
+    if (this->number_of_vertices >= 1) {
         this->destruct();
     }
 }
 
 void Graph::destruct() {
-    for (int i = 0; i<number_of_vertices; i++){
-        delete [] matrix [i];
+    for (int i = 0; i < number_of_vertices; i++) {
+        delete[] matrix[i];
     }
-    delete [] matrix;
+    delete[] matrix;
     this->number_of_vertices = 0;
 }
 
 
 void Graph::loadData(const string &name_file) {
-    this->destruct();
+    if (this->number_of_vertices >= 1)
+        this->destruct();
     string val;
     fstream file_in;
 
@@ -56,8 +57,8 @@ void Graph::loadData(const string &name_file) {
 }
 
 void Graph::display() const {
-    for (int i = 0; i < this->number_of_vertices; i ++){
-        for (int j = 0; j < this->number_of_vertices; j++){
+    for (int i = 0; i < this->number_of_vertices; i++) {
+        for (int j = 0; j < this->number_of_vertices; j++) {
             cout << this->matrix[i][j] << " ";
         }
         cout << endl;
@@ -74,29 +75,29 @@ int Graph::getDistance(int startDist, int endDist) const {
 
 void Graph::generateGraph(int size) {
 
-    if(size <= 1){
-        cout<<"To little nodes were given." << endl;
+    if (size <= 1) {
+        cout << "To little nodes were given." << endl;
         return;
     }
-    if(this->number_of_vertices >1)
+    if (this->number_of_vertices >= 1)
         this->destruct();
     this->number_of_vertices = size;
     this->resize(size);
 
-    srand (time(nullptr));
-    for (int i = 0; i < this->number_of_vertices; i ++){
-        for (int j = 0; j < this->number_of_vertices; j++){
-            if(i == j)
+    srand(time(nullptr));
+    for (int i = 0; i < this->number_of_vertices; i++) {
+        for (int j = 0; j < this->number_of_vertices; j++) {
+            if (i == j)
                 this->matrix[i][j] = 0;
             else
-                this->matrix[i][j] = rand()%100+1;
+                this->matrix[i][j] = rand() % 100 + 1;
         }
     }
 }
 
 void Graph::resize(int new_size) {
-    this->matrix = new int * [new_size];
-    for (int i = 0; i <new_size; ++i){
-        this->matrix[i] = new int [new_size];
+    this->matrix = new int *[new_size];
+    for (int i = 0; i < new_size; ++i) {
+        this->matrix[i] = new int[new_size];
     }
 }

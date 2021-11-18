@@ -7,8 +7,8 @@
 
 #include <vector>
 #include <string>
-#include "Structures.h"
 
+using namespace std;
 
 class Graph {
 public:
@@ -23,7 +23,7 @@ public:
 
     [[nodiscard]] int getNumberOfVertices() const;
 
-    int getDistance(int startDist, int endDist) const;
+    [[nodiscard]] int getDistance(int startDist, int endDist) const;
 
     void loadData(const string &name_file);
 

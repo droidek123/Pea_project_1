@@ -10,6 +10,24 @@
 #include "../graph/Graph.h"
 #include "../Result/Result.h"
 
+/**
+ *  Struktura do trzymania wartosci w mapie
+ */
+struct MapInfo{
+    int weight;
+    int parent;
+};
+
+typedef std::pair<int,int> pairKey;
+
+struct pair_hash
+{
+    template <class T1, class T2>
+    std::size_t operator() (const std::pair<T1, T2> &pairKey) const
+    {
+        return std::hash<T1>()(pairKey.first) ^ std::hash<T2>()(pairKey.second);
+    }
+};
 
 class Dynamic_programming {
 private:
@@ -25,7 +43,7 @@ public:
 
     static int make_subpath(int subset, int vertex);
 
-    static bool is_vertex_in_subpath(int subset, int city);
+    static bool is_vertex_in_subpath(int subset, int vertex);
 };
 
 
